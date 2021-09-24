@@ -9,9 +9,16 @@ blueprint:
       selector:
         entity:
           domain: sensor
-    target_light:
-      name: Lights
-      description: The lights you want to control with the remote
+    target_light_short:
+      name: Lights (short press sun)
+      description: The lights you want to control with the remote short press sun
+      selector:
+        target:
+          entity:
+            domain: light
+    target_light_long:
+      name: Lights (long press sun)
+      description: The lights you want to control with the remote long press sun
       selector:
         target:
           entity:
@@ -28,25 +35,8 @@ blueprint:
       default: []
       selector:
         action: {}
-    brightness:
-      name: Brightness
-      description: The brightness you want your lights to be when turning them on
-      default: 100
-      selector:
-        number:
-          min: 0.0
-          max: 100.0
-          mode: slider
-          step: 1.0
-          unit_of_measurement: '%'
-    force_brightness:
-      name: Force Brightness
-      description: Force the above set brightness when turning on the lamps?
-      default: false
-      selector:
-        boolean: {}
       
-  source_url: https://raw.githubusercontent.com/Computerfreak14/Z2M-Styrbar-remote-blueprint/main/Z2M-IKEA-STYRBAR-remote.yaml
+  source_url: https://raw.githubusercontent.com/bvdberg01/Z2M-Styrbar-remote-blueprint/main/Z2M-IKEA-STYRBAR-remote.yaml
 trigger:
   - platform: state
     entity_id: !input 'remote'
@@ -60,61 +50,26 @@ action:
           - condition: template
             value_template: '{{ command == ''on'' }}'
         sequence:
-          - choose:
-            - conditions: '{{ force_brightness }}'
-              sequence:
-              - service: light.turn_on
-                target: !input 'target_light'
-                data:
-                  transition: 1
-                  brightness_pct: !input 'brightness'
-                  color_name: white
-            default:
-            - service: light.turn_on
-              target: !input 'target_light'
-              data:
-                transition: 1
-                color_name: white
+          - service: light.turn_on
+            target: !input 'target_light_short' 
+      - conditions:
+          - condition: template
+            value_template: '{{ command == ''brightness_move_up'' }}'
+        sequence:
+          - service: light.turn_on
+            target: !input 'target_light_long'              
       - conditions:
           - condition: template
             value_template: '{{ command == ''off'' }}'
         sequence:
           - service: light.turn_off
-            target: !input 'target_light'
+            target: !input 'target_light_short'
       - conditions:
           - condition: template
             value_template: '{{ command == ''brightness_move_down'' }}'
         sequence:
-          - repeat:
-              until:
-                - condition: state
-                  entity_id: !input 'remote'
-                  state: brightness_stop
-                  attribute: action
-              sequence:
-                - service: light.turn_on
-                  data:
-                    brightness_step_pct: -10
-                    transition: 1
-                  target: !input 'target_light'
-                - delay: '1'
-      - conditions:
-          - condition: template
-            value_template: '{{ command == ''brightness_move_up'' }}'
-        sequence:
-          - repeat:
-              until:
-                - condition: state
-                  entity_id: !input 'remote'
-                  state: brightness_stop
-                  attribute: action
-              sequence:
-                - service: light.turn_on
-                  data:
-                    brightness_step_pct: +10
-                    transition: 1
-                  target: !input 'target_light'
-                - delay: '1'
+          - service: light.turn_off
+            target: !input 'target_light_long'
       - conditions:
           - '{{ command == ''arrow_left_click'' }}'
         sequence: !input 'button_left'
