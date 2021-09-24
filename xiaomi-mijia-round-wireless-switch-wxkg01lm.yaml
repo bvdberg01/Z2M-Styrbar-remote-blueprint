@@ -49,8 +49,7 @@ action:
         sequence: !input 'onepress'
       - conditions:
           - '{{ command == ''double'' }}'
-        sequence: !input 'twopress'
-        - choose:      
+        sequence: !input 'twopress'    
       - conditions:
           - '{{ command == ''triple'' }}'
         sequence: !input 'threepress'
