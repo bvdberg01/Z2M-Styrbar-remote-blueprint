@@ -1,6 +1,6 @@
 blueprint:
-  name: Ikea Styrbar Remote
-  description: Control your lights with the IKEA STYRBAR remote. You can also set actions for the left and right button.
+  name: Xiaomi MiJia wireless switch (WXKG01LM) Z2MQTT
+  description: one, two ,three and four press commands
   domain: automation
   input:
     remote:
@@ -16,20 +16,20 @@ blueprint:
       selector:
         action: {}
     twopress:
-      name: two press
-      description: Action to run on two press
+      name: two presses
+      description: Action to run on two presses
       default: []
       selector:
         action: {}
     threepress:
-      name: three press
-      description: Action to run on three press
+      name: three presses
+      description: Action to run on three presses
       default: []
       selector:
         action: {}
     fourpress:
-      name: four press
-      description: Action to run on four press
+      name: four presses
+      description: Action to run on four presses
       default: []
       selector:
         action: {}
