@@ -1,0 +1,61 @@
+blueprint:
+  name: Ikea Styrbar Remote
+  description: Control your lights with the IKEA STYRBAR remote. You can also set actions for the left and right button.
+  domain: automation
+  input:
+    remote:
+      name: Remote
+      description: The action entity of your Styrbar remote
+      selector:
+        entity:
+          domain: sensor
+    onepress:
+      name: one press
+      description: Action to run on one press
+      default: []
+      selector:
+        action: {}
+    twopress:
+      name: two press
+      description: Action to run on two press
+      default: []
+      selector:
+        action: {}
+    threepress:
+      name: three press
+      description: Action to run on three press
+      default: []
+      selector:
+        action: {}
+    fourpress:
+      name: four press
+      description: Action to run on four press
+      default: []
+      selector:
+        action: {}
+      
+  source_url: https://raw.githubusercontent.com/bvdberg01/Z2M-Styrbar-remote-blueprint/main/Z2M-IKEA-STYRBAR-remote.yaml
+trigger:
+  - platform: state
+    entity_id: !input 'remote'
+    attribute: action
+condition: []
+action:
+  - variables:
+      command: '{{ trigger.to_state.state }}'
+  - choose:      
+      - conditions:
+          - '{{ command == ''single'' }}'
+        sequence: !input 'onepress'
+      - conditions:
+          - '{{ command == ''double'' }}'
+        sequence: !input 'twopress'
+        - choose:      
+      - conditions:
+          - '{{ command == ''triple'' }}'
+        sequence: !input 'threepress'
+      - conditions:
+          - '{{ command == ''quadruple'' }}'
+        sequence: !input 'fourpress'
+mode: restart
+max_exceeded: silent
