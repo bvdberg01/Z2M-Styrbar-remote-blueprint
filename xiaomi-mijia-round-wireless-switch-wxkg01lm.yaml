@@ -56,5 +56,5 @@ action:
       - conditions:
           - '{{ command == ''quadruple'' }}'
         sequence: !input 'fourpress'
-mode: restart
+mode: parallel
 max_exceeded: silent
