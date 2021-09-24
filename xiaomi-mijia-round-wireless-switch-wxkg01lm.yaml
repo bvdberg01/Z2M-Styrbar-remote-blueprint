@@ -34,7 +34,7 @@ blueprint:
       selector:
         action: {}
       
-  source_url: https://raw.githubusercontent.com/bvdberg01/Z2M-Styrbar-remote-blueprint/main/Z2M-IKEA-STYRBAR-remote.yaml
+  source_url: https://raw.githubusercontent.com/bvdberg01/Z2M-Styrbar-remote-blueprint/main/xiaomi-mijia-round-wireless-switch-wxkg01lm.yaml
 trigger:
   - platform: state
     entity_id: !input 'remote'
