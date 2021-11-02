@@ -10,7 +10,7 @@ blueprint:
       description: The sensor wich triggers the snapshot creation
       selector:
           entity:
-            domain: swich
+            domain: switch
             device_class: outlet
 
     camera:
