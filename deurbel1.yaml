@@ -1,13 +1,12 @@
 blueprint:
   name: Send a camera snapshot when motion is detected
   description: >
-    This automation blueprint creates a camera snapshot if motion is detected 
-    and sends a notification to your phone with the picture.
+    This automation blueprint creates a camera snapshot when doorbell is pressed.
   domain: automation
   input:
     Deurbel:
       name: Deurbel
-      description: The sensor wich triggers the snapshot creation
+      description: The switch wich triggers the snapshot creation
       selector:
           entity:
             domain: switch
@@ -36,13 +35,13 @@ blueprint:
 
     notification_title:
       name: Notification title (Optional)
-      description: 'Default: "Motion detected!"'
-      default: "Motion detected!"
+      description: 'Default: "Doorbell!"'
+      default: "Doorbell!"
 
     notification_message:
       name: Notification message (Optional)
-      description: 'Default: "{{ Deurbelname }} detected movement!"'
-      default: "{{ Deurbelname }} detected movement!"
+      description: 'Default: "{{ Deurbelname }} pressed!"'
+      default: "{{ Deurbelname }} pressed!"
       
     delay:
       name: Delay (Optional)
