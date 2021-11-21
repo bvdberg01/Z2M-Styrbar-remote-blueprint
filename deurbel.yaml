@@ -46,7 +46,7 @@ blueprint:
     delay:
       name: Delay (Optional)
       description: Wait before creating camera snapshot
-      default: ""
+      default: 0
       selector:
         number:
             min: 0
