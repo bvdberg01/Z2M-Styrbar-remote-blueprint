@@ -9,9 +9,8 @@ blueprint:
       description: The switch wich triggers the snapshot creation
       selector:
           entity:
-            domain: switch
-            device_class: outlet
-
+            domain: binary_sensor
+            
     camera:
       name: Camera
       description: The camera which creates the snapshot
