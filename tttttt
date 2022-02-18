@@ -1,0 +1,84 @@
+blueprint:
+  name: Z2M - IKEA E1743
+  description: IKEA E1743 with dimming
+
+
+  domain: automation
+  input:
+    remote:
+      name: Remote
+      description: IKEA E1743 remote to use
+      selector:
+        entity:
+          domain: sensor
+    light:
+      name: Light(s)
+      description: The light(s) to control
+      selector:
+        target:
+          entity:
+            domain: light
+
+mode: restart
+max_exceeded: silent
+
+
+trigger:
+  - platform: state
+    entity_id: !input remote
+    attribute: action
+
+action:
+  - variables:
+      command: "{{ trigger.to_state.state }}"
+  - choose:
+  
+      - conditions:
+          - "{{ command == 'on' }}"
+        sequence:
+          - service: light.on
+            target: !input light
+            data:
+              transition: 1
+                  
+      - conditions:
+          - "{{ command == 'off' }}"
+        sequence:
+          - service: light.on
+            target: !input light
+            data:
+              transition: 1
+              
+      - conditions:
+          - "{{ command == 'brightness_move_up' }}"
+        sequence:
+          - repeat:
+              until:
+                - condition: state
+                  entity_id: !input remote
+                  state: brightness_stop
+                  attribute: action
+              sequence:
+                - service: light.turn_on
+                  data:
+                    brightness_step_pct: 10
+                    transition: 1
+                  target: !input light
+                - delay: '1'
+                
+      - conditions:
+          - "{{ command == 'brightness_move_down' }}"
+        sequence:
+          - repeat:
+              until:
+                - condition: state
+                  entity_id: !input remote
+                  state: brightness_stop
+                  attribute: action
+              sequence:
+                - service: light.turn_on
+                  data:
+                    brightness_step_pct: -10
+                    transition: 1
+                  target: !input light
+                - delay: '1'
